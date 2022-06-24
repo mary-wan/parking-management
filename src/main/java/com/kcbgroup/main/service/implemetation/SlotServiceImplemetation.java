@@ -46,7 +46,37 @@ public class SlotServiceImplemetation implements SlotService {
 
 	@Override
 	public ResponseEntity<?> reserveSlot(String staffNumber, String levelNumber, String slotNumber) {
-		// TODO Auto-generated method stub
+
+		Staff staff = staffRepository.findByStaffNumber(staffNumber);
+		Levels level = levelRepository.findByLevelNumber(levelNumber);
+		if (slotRepository.findBySlotNumber(slotNumber, level.getId()) != null) {
+			Slots slot = slotRepository.findBySlotNumber(slotNumber, level.getId());
+
+			log.info("****** STEP 0 ***{}", slot.getStatus());
+			Booking booking_ = bookingRepository.findBooking(staffNumber, BookingStatus.INPROGRESS.toString());
+			if (booking_ == null) {
+				log.info("****** STEP 1 ************");
+				if (slot.getStatus() == SlotAvailability.AVAILABLE) {
+					log.info("****** STEP 2 ************");
+					if (level.getLevelNumber().equalsIgnoreCase("1") && (staff.getJobGroup().equalsIgnoreCase("E"))) {
+						log.info("****** STEP 3 ************");
+						Booking booking = new Booking();
+						booking.setLevelNumber(level.getLevelNumber());
+						booking.setSlotNumber(slot.getSlotNumber());
+						booking.setLevelId(level.getId());
+						booking.setStaffId(staff.getId());
+						booking.setStaffNumber(staffNumber);
+						booking.setBookingTime(new Date());
+						booking.setBookingStatus(BookingStatus.RESERVED);
+						bookingRepository.save(booking);
+						slot.setStatus(SlotAvailability.RESERVED);
+						slotRepository.save(slot);
+						return new ResponseEntity<>("Reservation successfull.", HttpStatus.CREATED);
+					}
+				}
+			}
+		}
+
 		return null;
 	}
 
@@ -68,7 +98,7 @@ public class SlotServiceImplemetation implements SlotService {
 
 			log.info("****** STEP 0 ***{}", slot.getStatus());
 			Booking booking_ = bookingRepository.findBooking(staffNumber, BookingStatus.INPROGRESS.toString());
-			if (booking_ == null) {			
+			if (booking_ == null) {
 				log.info("****** STEP 1 ************");
 				if (slot.getStatus() == SlotAvailability.AVAILABLE) {
 					log.info("****** STEP 2 ************");

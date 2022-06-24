@@ -1,11 +1,13 @@
 package com.kcbgroup.main.service.implemetation;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.kcbgroup.main.enums.BookingStatus;
@@ -38,8 +40,12 @@ public class BookingServiceImplementation implements BookingService{
 	}
 
 	@Override
-	public Booking showsStaffBooking(String staffNumber) {
-		return bookingRepository.findByStaffNumber(staffNumber);
+	public ResponseEntity<?> showsStaffBooking(String staffNumber) {
+		Booking booking = bookingRepository.findBooking(staffNumber.toString(), BookingStatus.INPROGRESS.toString());
+		if(booking !=null) {
+			return new ResponseEntity<>(booking,HttpStatus.OK);
+		}
+		return new ResponseEntity<>("Staff has no booked slot.",HttpStatus.NOT_FOUND);
 	}
 
 	@Override
@@ -72,4 +78,27 @@ public class BookingServiceImplementation implements BookingService{
 		}
 	}
 
+	@Override
+	@Scheduled(fixedRate = 10000)
+	public void checkUnreportedBooking() {
+		try {
+			  List<Booking> unreportedBookings = bookingRepository.findByBookingStatus(BookingStatus.INPROGRESS);
+			  for(Booking booking :unreportedBookings){
+				  
+				  //GET INPROGRESS BOOKINGS WITHIN 3 HOURS 
+				  List<Booking> lst = bookingRepository.findBookingTimeExcedes3Hours(booking.getId(),BookingStatus.INPROGRESS.toString());
+				  if(lst.size() > 0) {
+					  //RELEASE THEIR BOOKING
+					  log.info("------ EXPIRED BOOKINGS --- {}", booking.getStaffId());
+					  booking.setBookingStatus(BookingStatus.EXPIRED);
+					  bookingRepository.save(booking);
+					  Slots slot = slotRepository.findBySlotNumber(booking.getSlotNumber(), booking.getLevelId());
+					  slot.setStatus(SlotAvailability.AVAILABLE);
+					  slotRepository.save(slot);
+				  }
+	          }
+		}catch(Exception e) {
+			log.error(e.getMessage());
+		}
+	}
 }

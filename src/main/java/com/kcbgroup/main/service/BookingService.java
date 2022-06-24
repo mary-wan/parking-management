@@ -12,10 +12,12 @@ public interface BookingService {
 	
 	List<Booking> getAllBooking();
 	
-	Booking showsStaffBooking(String staffNumber);
+	ResponseEntity<?> showsStaffBooking(String staffNumber);
 	
 	ResponseEntity<?> checkIn(String staffNumber);
 	
 	ResponseEntity<?> checkOut(String staffNumber);
+	
+	void checkUnreportedBooking();
 
 }

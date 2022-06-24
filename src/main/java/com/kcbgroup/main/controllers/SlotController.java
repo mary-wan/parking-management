@@ -24,6 +24,11 @@ public class SlotController {
 		return slotService.bookSlot(staffNumber, levelNumber, slotNumber);		
 	}
 	
+	@RequestMapping(value ="/reserve/slot", method = RequestMethod.GET)
+	public ResponseEntity<?> reserveSlot(@RequestParam String staffNumber, @RequestParam String levelNumber, @RequestParam String slotNumber){
+		return slotService.reserveSlot(staffNumber, levelNumber, slotNumber);		
+	}
+	
 	@RequestMapping(value ="/get/slots",method= RequestMethod.GET)
 	public List<Slots> getAllSlots(){
 		return slotService.getAllSlots();		

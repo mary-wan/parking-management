@@ -25,7 +25,7 @@ public class BookingController {
 	}
 	
 	@RequestMapping(value = "/get/staff/booking", method = RequestMethod.GET)
-	public Booking getStaffBooking(@RequestParam String staffNumber){
+	public ResponseEntity<?> getStaffBooking(@RequestParam String staffNumber){
 		return bookingService.showsStaffBooking(staffNumber);
 	}
 	
