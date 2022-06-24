@@ -45,7 +45,7 @@ public class SlotServiceImplemetation implements SlotService {
 	}
 
 	@Override
-	public ResponseEntity<?> reserveSlot(Long staffId, Long levelId, Long slotId) {
+	public ResponseEntity<?> reserveSlot(String staffNumber, String levelNumber, String slotNumber) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -54,7 +54,6 @@ public class SlotServiceImplemetation implements SlotService {
 	public ResponseEntity<?> bookSlot(String staffNumber, String levelNumber, String slotNumber) {
 
 		Staff staff = staffRepository.findByStaffNumber(staffNumber);
-
 		Levels level = levelRepository.findByLevelNumber(levelNumber);
 
 		if (level.getLevelNumber() == null) {
@@ -68,8 +67,8 @@ public class SlotServiceImplemetation implements SlotService {
 			Slots slot = slotRepository.findBySlotNumber(slotNumber, level.getId());
 
 			log.info("****** STEP 0 ***{}", slot.getStatus());
-
-			if (bookingRepository.findByStaffNumber(staffNumber) == null) {			
+			Booking booking_ = bookingRepository.findBooking(staffNumber, BookingStatus.INPROGRESS.toString());
+			if (booking_ == null) {			
 				log.info("****** STEP 1 ************");
 				if (slot.getStatus() == SlotAvailability.AVAILABLE) {
 					log.info("****** STEP 2 ************");
@@ -78,8 +77,9 @@ public class SlotServiceImplemetation implements SlotService {
 									|| staff.getJobGroup().equalsIgnoreCase("E"))) {
 						log.info("****** STEP 3 ************");
 						Booking booking = new Booking();
+						booking.setLevelNumber(level.getLevelNumber());
+						booking.setSlotNumber(slot.getSlotNumber());
 						booking.setLevelId(level.getId());
-						booking.setSlotId(slot.getId());
 						booking.setStaffId(staff.getId());
 						booking.setStaffNumber(staffNumber);
 						booking.setBookingTime(new Date());
@@ -94,8 +94,9 @@ public class SlotServiceImplemetation implements SlotService {
 									|| staff.getJobGroup().equalsIgnoreCase("B"))) {
 						log.info("****** STEP 4 ******");
 						Booking booking = new Booking();
+						booking.setLevelNumber(level.getLevelNumber());
+						booking.setSlotNumber(slot.getSlotNumber());
 						booking.setLevelId(level.getId());
-						booking.setSlotId(slot.getId());
 						booking.setStaffId(staff.getId());
 						booking.setStaffNumber(staffNumber);
 						booking.setBookingTime(new Date());
@@ -110,8 +111,9 @@ public class SlotServiceImplemetation implements SlotService {
 									|| staff.getJobGroup().equalsIgnoreCase("B"))) {
 						log.info("****** STEP 5 ******");
 						Booking booking = new Booking();
+						booking.setLevelNumber(level.getLevelNumber());
+						booking.setSlotNumber(slot.getSlotNumber());
 						booking.setLevelId(level.getId());
-						booking.setSlotId(slot.getId());
 						booking.setStaffId(staff.getId());
 						booking.setStaffNumber(staffNumber);
 						booking.setBookingTime(new Date());

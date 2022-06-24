@@ -33,5 +33,10 @@ public class BookingController {
 	public ResponseEntity<?> checkInStaff(@RequestParam String staffNumber){
 		return bookingService.checkIn(staffNumber);
 	}
+	
+	@RequestMapping(value = "/checkOut/staff", method = RequestMethod.GET)
+	public ResponseEntity<?> checkOutStaff(@RequestParam String staffNumber){
+		return bookingService.checkOut(staffNumber);
+	}
 
 }

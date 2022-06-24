@@ -25,7 +25,7 @@ public class SlotController {
 	}
 	
 	@RequestMapping(value ="/get/slots",method= RequestMethod.GET)
-	public List<Slots> getAllSlotst(){
+	public List<Slots> getAllSlots(){
 		return slotService.getAllSlots();		
 	}
 	
