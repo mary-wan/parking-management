@@ -10,11 +10,13 @@ import com.kcbgroup.main.models.Slots;
 @Service
 public interface SlotService {
 	
-	List<Slots> getAllAlots();
+	List<Slots> getAllSlots();
 	
 	ResponseEntity<?> reserveSlot(Long staffId, Long levelId, Long slotId );
 	
 	ResponseEntity<?> bookSlot(String staffNumber, String levelNumber, String slotNumber );
+	
+	List<Slots> getLevelSlots(String levelNumber);
 	
 
 }

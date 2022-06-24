@@ -20,17 +20,13 @@ public class LevelController {
 	private LevelService levelService;
 	
 	@RequestMapping(value = "/levels", method = RequestMethod.GET)
-	public List<Levels> getLevels() {
-		
-		return levelService.getAllLevels();
-		
+	public List<Levels> getLevels() {	
+		return levelService.getAllLevels();	
 	}
 	
 	@RequestMapping(value = "/level/{levelNumber}", method = RequestMethod.GET)
-	public ResponseEntity<?> getLevel(@PathVariable String levelNumber) {
-		
-		return levelService.getLevelByNumber(levelNumber);
-		
+	public ResponseEntity<?> getLevel(@PathVariable String levelNumber) {		
+		return levelService.getLevelByNumber(levelNumber);		
 	}
 
 }

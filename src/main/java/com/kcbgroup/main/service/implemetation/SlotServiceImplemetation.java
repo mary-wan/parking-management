@@ -1,5 +1,6 @@
 package com.kcbgroup.main.service.implemetation;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import com.kcbgroup.main.enums.BookingStatus;
 import com.kcbgroup.main.enums.SlotAvailability;
 import com.kcbgroup.main.models.Booking;
 import com.kcbgroup.main.models.Levels;
@@ -37,7 +39,7 @@ public class SlotServiceImplemetation implements SlotService {
 	BookingRepository bookingRepository;
 
 	@Override
-	public List<Slots> getAllAlots() {
+	public List<Slots> getAllSlots() {
 
 		return slotRepository.findAll();
 	}
@@ -62,14 +64,14 @@ public class SlotServiceImplemetation implements SlotService {
 			log.info("------------ {}", level.getLevelNumber());
 		}
 
-		if (slotRepository.findBySlotNumber(slotNumber) != null) {
-			Slots slot = slotRepository.findBySlotNumber(slotNumber);
+		if (slotRepository.findBySlotNumber(slotNumber, level.getId()) != null) {
+			Slots slot = slotRepository.findBySlotNumber(slotNumber, level.getId());
 
 			log.info("****** STEP 0 ***{}", slot.getStatus());
 
-			if (slot.getStatus() == SlotAvailability.AVAILABLE) {
+			if (bookingRepository.findByStaffNumber(staffNumber) == null) {			
 				log.info("****** STEP 1 ************");
-				if (bookingRepository.findByStaffNumber(staffNumber) == null) {
+				if (slot.getStatus() == SlotAvailability.AVAILABLE) {
 					log.info("****** STEP 2 ************");
 					if (level.getLevelNumber().equalsIgnoreCase("1")
 							&& (staff.getJobGroup().equalsIgnoreCase("C") || staff.getJobGroup().equalsIgnoreCase("D")
@@ -80,6 +82,8 @@ public class SlotServiceImplemetation implements SlotService {
 						booking.setSlotId(slot.getId());
 						booking.setStaffId(staff.getId());
 						booking.setStaffNumber(staffNumber);
+						booking.setBookingTime(new Date());
+						booking.setBookingStatus(BookingStatus.INPROGRESS);
 						bookingRepository.save(booking);
 						slot.setStatus(SlotAvailability.BOOKED);
 						slotRepository.save(slot);
@@ -94,6 +98,8 @@ public class SlotServiceImplemetation implements SlotService {
 						booking.setSlotId(slot.getId());
 						booking.setStaffId(staff.getId());
 						booking.setStaffNumber(staffNumber);
+						booking.setBookingTime(new Date());
+						booking.setBookingStatus(BookingStatus.INPROGRESS);
 						bookingRepository.save(booking);
 						slot.setStatus(SlotAvailability.BOOKED);
 						slotRepository.save(slot);
@@ -108,6 +114,8 @@ public class SlotServiceImplemetation implements SlotService {
 						booking.setSlotId(slot.getId());
 						booking.setStaffId(staff.getId());
 						booking.setStaffNumber(staffNumber);
+						booking.setBookingTime(new Date());
+						booking.setBookingStatus(BookingStatus.INPROGRESS);
 						bookingRepository.save(booking);
 						slot.setStatus(SlotAvailability.BOOKED);
 						slotRepository.save(slot);
@@ -115,20 +123,24 @@ public class SlotServiceImplemetation implements SlotService {
 					} else {
 						log.info("****** STEP 6 EXIT ******");
 						log.info("{} Is not allowed to park at level {}.", staffNumber);
-						return new ResponseEntity<>("Not allowed to park at this level.",
-								HttpStatus.FORBIDDEN);
+						return new ResponseEntity<>("Not allowed to park at this level.", HttpStatus.OK);
 					}
 				} else {
-					log.info("****** STEP 7 EXIT ******");
-					log.info("{} has a booked slot.", staffNumber);
-					return new ResponseEntity<>("Already has a booked slot.", HttpStatus.ALREADY_REPORTED);
+					log.info("****** STEP 8 EXIT ******");
+					log.info("Slot {} is not available", slotNumber);
+					return new ResponseEntity<>("Slot is not available.", HttpStatus.CONFLICT);
 				}
 			} else {
-				log.info("****** STEP 8 EXIT ******");
-				log.info("Slot {} is not available", slotNumber);
-				return new ResponseEntity<>("Slot is not available.", HttpStatus.OK);
+				log.info("****** STEP 7 EXIT ******");
+				log.info("{} has a booked slot.", staffNumber);
+				return new ResponseEntity<>("Staff already has a booked slot.", HttpStatus.ALREADY_REPORTED);
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public List<Slots> getLevelSlots(String levelNumber) {
+		return slotRepository.findByLevelId((levelRepository.findByLevelNumber(levelNumber)).getId());
 	}
 }
