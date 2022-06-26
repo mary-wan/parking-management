@@ -14,7 +14,7 @@ public interface StaffService {
 	
 	ResponseEntity<?> addStaff(Staff staff);
 	
-	ResponseEntity<?> deleteStaff(Long stuffId);
+	ResponseEntity<?> deleteStaff(String staffNumber);
 	
 
 }

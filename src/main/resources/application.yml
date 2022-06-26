@@ -5,7 +5,7 @@ spring:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: update
-    show-sql: 'true'
+    show-sql: 'false'
   datasource:
     hikari:
       connection-timeout: '60000'

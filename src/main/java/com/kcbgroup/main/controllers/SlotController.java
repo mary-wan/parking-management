@@ -17,7 +17,7 @@ import com.kcbgroup.main.service.SlotService;
 public class SlotController {
 	
 	@Autowired
-	SlotService slotService;
+	private SlotService slotService;
 	
 	@RequestMapping(value ="/book/slot", method = RequestMethod.GET)
 	public ResponseEntity<?> bookSlot(@RequestParam String staffNumber, @RequestParam String levelNumber, @RequestParam String slotNumber){

@@ -17,7 +17,7 @@ import com.kcbgroup.main.service.BookingService;
 public class BookingController {
 	
 	@Autowired
-	BookingService bookingService;
+	private BookingService bookingService;
 	
 	@RequestMapping(value = "/get/bookings", method = RequestMethod.GET)
 	public List<Booking> getAllBookings(){

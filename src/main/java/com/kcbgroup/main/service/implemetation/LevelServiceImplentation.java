@@ -15,7 +15,7 @@ import com.kcbgroup.main.service.LevelService;
 public class LevelServiceImplentation implements LevelService{
 
 	@Autowired 
-	LevelRepository levelRepository;
+	private LevelRepository levelRepository;
 	
 	@Override
 	public List<Levels> getAllLevels() {

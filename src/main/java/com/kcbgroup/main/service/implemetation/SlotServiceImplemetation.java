@@ -27,16 +27,16 @@ import lombok.extern.slf4j.Slf4j;
 public class SlotServiceImplemetation implements SlotService {
 
 	@Autowired
-	SlotRepository slotRepository;
+	private SlotRepository slotRepository;
 
 	@Autowired
-	StaffRepository staffRepository;
+	private StaffRepository staffRepository;
 
 	@Autowired
-	LevelRepository levelRepository;
+	private LevelRepository levelRepository;
 
 	@Autowired
-	BookingRepository bookingRepository;
+	private BookingRepository bookingRepository;
 
 	@Override
 	public List<Slots> getAllSlots() {
@@ -53,7 +53,7 @@ public class SlotServiceImplemetation implements SlotService {
 			Slots slot = slotRepository.findBySlotNumber(slotNumber, level.getId());
 
 			log.info("****** STEP 0 ***{}", slot.getStatus());
-			Booking booking_ = bookingRepository.findBooking(staffNumber, BookingStatus.INPROGRESS.toString());
+			Booking booking_ = bookingRepository.findInprogressOrReservedBooking(staffNumber.toString());
 			if (booking_ == null) {
 				log.info("****** STEP 1 ************");
 				if (slot.getStatus() == SlotAvailability.AVAILABLE) {
@@ -74,6 +74,8 @@ public class SlotServiceImplemetation implements SlotService {
 						return new ResponseEntity<>("Reservation successfull.", HttpStatus.CREATED);
 					}
 				}
+			}else{
+				return new ResponseEntity<>("Staff already has a booked slot.", HttpStatus.ALREADY_REPORTED);
 			}
 		}
 
@@ -97,7 +99,7 @@ public class SlotServiceImplemetation implements SlotService {
 			Slots slot = slotRepository.findBySlotNumber(slotNumber, level.getId());
 
 			log.info("****** STEP 0 ***{}", slot.getStatus());
-			Booking booking_ = bookingRepository.findBooking(staffNumber, BookingStatus.INPROGRESS.toString());
+			Booking booking_ = bookingRepository.findInprogressOrReservedBooking(staffNumber.toString());
 			if (booking_ == null) {
 				log.info("****** STEP 1 ************");
 				if (slot.getStatus() == SlotAvailability.AVAILABLE) {
