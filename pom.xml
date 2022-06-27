@@ -8,11 +8,13 @@
 		<version>2.6.7</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+	
 	<groupId>com.kcbgroup.main</groupId>
 	<artifactId>kcb-parking-management</artifactId>
 	<version>0.0.1</version>
 	<name>kcb-parking-management</name>
 	<description>kcb parking management</description>
+	
 	<properties>
 		<java.version>11</java.version>
 	</properties>

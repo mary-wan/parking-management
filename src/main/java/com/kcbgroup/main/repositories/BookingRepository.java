@@ -17,7 +17,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 	@Query(value = "SELECT * FROM booking WHERE booking.staff_number=:staffNumber AND (booking.booking_status='INPROGRESS' OR booking.booking_status='RESERVED')", nativeQuery = true)
 	Booking findInprogressOrReservedBooking(@Param("staffNumber") String staffNumber);
 		
-	@Query(value = "SELECT * FROM booking WHERE booking.booking_time < DATE_SUB(NOW(), INTERVAL 3 HOUR) AND booking.id=:id", nativeQuery = true)
+	@Query(value = "SELECT * FROM booking WHERE booking.booking_time < DATE_SUB(NOW(), INTERVAL 3 HOUR) AND booking.id=:id AND booking.check_in_time IS NULL", nativeQuery = true)
     List<Booking> findBookingTimeExcedes3Hours(@Param("id") Long id);
 	
 	List<Booking> findByBookingStatus(BookingStatus bookingStatus);
