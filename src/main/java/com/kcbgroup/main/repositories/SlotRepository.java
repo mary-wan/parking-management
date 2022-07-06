@@ -12,7 +12,9 @@ public interface SlotRepository extends JpaRepository<Slots, Long> {
 	
 	@Query(value = "SELECT * FROM slots WHERE slots.slot_number=:slotNumber AND slots.level_id=:levelId", nativeQuery = true)
 	Slots findBySlotNumber(@Param("slotNumber") String slotNumber, @Param("levelId") Long levelId);
-	
+
+	@Query(value = "SELECT * FROM slots WHERE slots.level_id=:levelId AND slots.status='AVAILABLE'", nativeQuery = true)
+	List<Slots> findAvailableSlotsOnLevel(@Param("levelId") Long levelId);
 	List<Slots> findByLevelId(Long levelId);
 
 

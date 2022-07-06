@@ -39,4 +39,9 @@ public class SlotController {
 		return slotService.getLevelSlots(LevelNumber);		
 	}
 
+	@RequestMapping(value ="/get/available/slots",method= RequestMethod.GET)
+	public List<Slots> getAvailableLevelSlots(@RequestParam Long levelId){
+		return slotService.getAvailableLevelSlots(levelId);
+	}
+
 }

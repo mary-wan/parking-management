@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kcbgroup.main.enums.ContractType;
 
+import com.kcbgroup.main.enums.StaffRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,13 +38,12 @@ public class Staff {
 	private String staffNumber;
 	private String mobile;
 	private String jobGroup;
+	private String password;
+
+	@Enumerated(EnumType.STRING)
+	private StaffRole role;
 	
 	@Enumerated(EnumType.STRING)
 	private ContractType contractType;
-
-	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY, optional = false,cascade = {CascadeType.ALL})
-	@JoinColumn(name = "role_id", nullable = false)	
-	private Role role;
 
 }

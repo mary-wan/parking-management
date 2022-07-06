@@ -105,7 +105,7 @@ public class SlotServiceImplemetation implements SlotService {
 				if (slot.getStatus() == SlotAvailability.AVAILABLE) {
 					log.info("****** STEP 2 ************");
 					if (level.getLevelNumber().equalsIgnoreCase("1")
-							&& (staff.getJobGroup().equalsIgnoreCase("C") || staff.getJobGroup().equalsIgnoreCase("D")
+							&& (staff.getJobGroup().equalsIgnoreCase("D")
 									|| staff.getJobGroup().equalsIgnoreCase("E"))) {
 						log.info("****** STEP 3 ************");
 						Booking booking = new Booking();
@@ -123,7 +123,7 @@ public class SlotServiceImplemetation implements SlotService {
 
 					} else if (level.getLevelNumber().equalsIgnoreCase("2")
 							&& (staff.getJobGroup().equalsIgnoreCase("C")
-									|| staff.getJobGroup().equalsIgnoreCase("B"))) {
+									|| staff.getJobGroup().equalsIgnoreCase("D"))) {
 						log.info("****** STEP 4 ******");
 						Booking booking = new Booking();
 						booking.setLevelNumber(level.getLevelNumber());
@@ -139,8 +139,24 @@ public class SlotServiceImplemetation implements SlotService {
 						return new ResponseEntity<>("Booking successfull.", HttpStatus.CREATED);
 
 					} else if (level.getLevelNumber().equalsIgnoreCase("3")
-							&& (staff.getJobGroup().equalsIgnoreCase("A")
+							&& (staff.getJobGroup().equalsIgnoreCase("C")
 									|| staff.getJobGroup().equalsIgnoreCase("B"))) {
+						log.info("****** STEP 5 ******");
+						Booking booking = new Booking();
+						booking.setLevelNumber(level.getLevelNumber());
+						booking.setSlotNumber(slot.getSlotNumber());
+						booking.setLevelId(level.getId());
+						booking.setStaffId(staff.getId());
+						booking.setStaffNumber(staffNumber);
+						booking.setBookingTime(new Date());
+						booking.setBookingStatus(BookingStatus.INPROGRESS);
+						bookingRepository.save(booking);
+						slot.setStatus(SlotAvailability.BOOKED);
+						slotRepository.save(slot);
+						return new ResponseEntity<>("Booking successfull.", HttpStatus.CREATED);
+					}else if (level.getLevelNumber().equalsIgnoreCase("4")
+							&& (staff.getJobGroup().equalsIgnoreCase("A")
+							|| staff.getJobGroup().equalsIgnoreCase("B"))) {
 						log.info("****** STEP 5 ******");
 						Booking booking = new Booking();
 						booking.setLevelNumber(level.getLevelNumber());
@@ -176,5 +192,10 @@ public class SlotServiceImplemetation implements SlotService {
 	@Override
 	public List<Slots> getLevelSlots(String levelNumber) {
 		return slotRepository.findByLevelId((levelRepository.findByLevelNumber(levelNumber)).getId());
+	}
+
+	@Override
+	public List<Slots> getAvailableLevelSlots(Long levelId) {
+		return slotRepository.findAvailableSlotsOnLevel(levelId);
 	}
 }
