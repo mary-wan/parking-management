@@ -198,4 +198,5 @@ public class SlotServiceImplemetation implements SlotService {
 	public List<Slots> getAvailableLevelSlots(Long levelId) {
 		return slotRepository.findAvailableSlotsOnLevel(levelId);
 	}
+
 }

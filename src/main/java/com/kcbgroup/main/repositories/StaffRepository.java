@@ -8,4 +8,6 @@ public interface StaffRepository extends JpaRepository<Staff, Long> {
 	
 	Staff findByStaffNumber(String staffNumber);
 
+	Staff findByStaffNumberAndPassword(String staffNumber, String password);
+
 }

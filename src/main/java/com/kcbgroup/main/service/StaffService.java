@@ -2,6 +2,7 @@ package com.kcbgroup.main.service;
 
 import java.util.List;
 
+import com.kcbgroup.main.dto.LoginDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,8 @@ public interface StaffService {
 	ResponseEntity<?> addStaff(Staff staff);
 	
 	ResponseEntity<?> deleteStaff(String staffNumber);
+
+	ResponseEntity<?> login(LoginDto loginDto);
 	
 
 }
