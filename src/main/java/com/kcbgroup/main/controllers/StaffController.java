@@ -33,7 +33,7 @@ public class StaffController {
 		return staffService.deleteStaff(staffNumber);		
 	}
 
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@RequestMapping(value = "/login/staff", method = RequestMethod.POST)
 	public ResponseEntity<?> login(@RequestBody LoginDto loginDto){
 		return staffService.login(loginDto);
 	}

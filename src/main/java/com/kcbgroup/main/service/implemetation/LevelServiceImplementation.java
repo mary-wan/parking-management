@@ -12,7 +12,7 @@ import com.kcbgroup.main.repositories.LevelRepository;
 import com.kcbgroup.main.service.LevelService;
 
 @Component
-public class LevelServiceImplentation implements LevelService{
+public class LevelServiceImplementation implements LevelService{
 
 	@Autowired 
 	private LevelRepository levelRepository;
